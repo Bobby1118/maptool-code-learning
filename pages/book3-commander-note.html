@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>디렉터의 팀 세팅 노트 — AI 크루를 데리고 15만 줄을 찍어내는 법</title>
+  <link rel="stylesheet" href="style.css">
+<style>
+/* ── 2-Tier Navigation — Dark ── */
+.nav-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(8, 8, 15, 0.95);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.nav-parts {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-parts::-webkit-scrollbar { display: none; }
+.part-tab {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  color: #505068;
+  font-size: 0.72rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+  border-bottom: 2px solid transparent;
+}
+.part-tab:hover { color: #e0e0e8; }
+.part-tab.active { color: #FF6B6B; border-bottom-color: #FF6B6B; }
+.nav-chapters { min-height: 34px; }
+.ch-group {
+  display: none;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  justify-content: center;
+}
+.ch-group::-webkit-scrollbar { height: 2px; }
+.ch-group::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+.ch-group.active { display: flex; }
+.ch-tab {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border: none;
+  background: transparent;
+  color: #505068;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+}
+.ch-tab:hover { color: #e0e0e8; background: rgba(255,107,107,0.04); }
+.ch-tab.active { color: #FF6B6B; border-bottom-color: #FF6B6B; font-weight: 600; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+@media (max-width: 768px) {
+  .part-tab { padding: 8px 8px; font-size: 0.65rem; }
+  .ch-tab { padding: 6px 10px; font-size: 0.72rem; }
+}
+</style>
+</head>
+<body data-book="3">
+<nav class="nav-wrap">
+  <div class="nav-parts">
+    <button class="part-tab active" data-part="cover">표지</button>
+    <button class="part-tab" data-part="p1">Part 1</button>
+    <button class="part-tab" data-part="p2">Part 2</button>
+    <button class="part-tab" data-part="p3">Part 3</button>
+    <button class="part-tab" data-part="appendix">부록</button>
+  </div>
+  <div class="nav-chapters">
+    <div class="ch-group active" data-part="cover">
+      <button class="ch-tab active" data-tab="panel-cover">표지</button>
+    </div>
+    <div class="ch-group" data-part="p1">
+      <button class="ch-tab" data-tab="panel-ch1">Ch.1</button>
+      <button class="ch-tab" data-tab="panel-ch2">Ch.2</button>
+    </div>
+    <div class="ch-group" data-part="p2">
+      <button class="ch-tab" data-tab="panel-ch3">Ch.3</button>
+      <button class="ch-tab" data-tab="panel-ch4">Ch.4</button>
+    </div>
+    <div class="ch-group" data-part="p3">
+      <button class="ch-tab" data-tab="panel-ch5">Ch.5</button>
+      <button class="ch-tab" data-tab="panel-ch6">Ch.6</button>
+    </div>
+    <div class="ch-group" data-part="appendix">
+      <button class="ch-tab" data-tab="panel-appendix">부록</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================
+     COVER PAGE
+     ============================================ -->
+<div class="tab-panel active" id="panel-cover">
+<div class="cover-page">
+  <div class="cover-line-count">151,000</div>
+  <h1 class="cover-title">디렉터의 팀 세팅 노트</h1>
+  <p class="cover-subtitle">AI 크루를 데리고 15만 줄을 찍어내는 법</p>
+  <div class="cover-decoration"></div>
+  <p class="cover-authors"><span>Bobby</span> × <span>Claude</span> × <span>Antigravity</span></p>
+  <p style="margin-top: var(--gap-lg); font-size: 0.88rem; color: var(--text-light);">
+    코드를 안 읽어도 된다.<br>
+    코드를 안 짜도 된다.<br>
+    대신 <strong>팀을 세팅하는 사람</strong>이 되면 된다.<br><br>
+    41일, 430+커밋, AI 두 명.<br>
+    디렉터는 이렇게 일한다.
+  </p>
+</div>
+
+<div class="colophon-page">
+  <h2>디렉터의 팀 세팅 노트</h2>
+  <p>AI 크루를 데리고 15만 줄을 찍어내는 법</p>
+  <p>&nbsp;</p>
+  <p>저자: Bobby × Claude (Anthropic) × Antigravity</p>
+  <p>초판 발행: 2026년 3월</p>
+  <p>&nbsp;</p>
+  <p>&copy; 2026 Bobby. All rights reserved.</p>
+</div>
+
+<!-- ============================================
+     TABLE OF CONTENTS
+     ============================================ -->
+<div class="toc-page">
+  <h1>목차</h1>
+
+  <div class="toc-part">
+    <div class="toc-part-title">PART 1</div>
+    <div class="toc-part-name">마인드셋</div>
+    <ul class="toc-chapters">
+      <li><a href="#ch1"><span class="ch-num">Ch.1</span> 디렉터라는 자리</a></li>
+      <li><a href="#ch2"><span class="ch-num">Ch.2</span> AI 크루 싸움 붙이기</a></li>
+    </ul>
+  </div>
+
+  <div class="toc-part">
+    <div class="toc-part-title">PART 2</div>
+    <div class="toc-part-name">세팅하기</div>
+    <ul class="toc-chapters">
+      <li><a href="#ch3"><span class="ch-num">Ch.3</span> 우리 팀 규칙서 만들기</a></li>
+      <li><a href="#ch4"><span class="ch-num">Ch.4</span> AI가 안 까먹게 하기</a></li>
+    </ul>
+  </div>
+
+  <div class="toc-part">
+    <div class="toc-part-title">PART 3</div>
+    <div class="toc-part-name">실전</div>
+    <ul class="toc-chapters">
+      <li><a href="#ch5"><span class="ch-num">Ch.5</span> 프로젝트 시작부터 끝까지</a></li>
+      <li><a href="#ch6"><span class="ch-num">Ch.6</span> 우리가 배운 것들</a></li>
+    </ul>
+  </div>
+
+  <div class="toc-part">
+    <div class="toc-part-title">부록</div>
+    <div class="toc-part-name">도구와 참조</div>
+    <ul class="toc-chapters">
+      <li><a href="#app-j"><span class="ch-num">J</span> 디렉터 체크리스트</a></li>
+      <li><a href="#app-k"><span class="ch-num">K</span> What vs How 변환 20개</a></li>
+      <li><a href="#app-l"><span class="ch-num">L</span> CLAUDE.md 템플릿</a></li>
+    </ul>
+  </div>
+</div>
+
+
+</div>
+<div class="tab-panel" id="panel-ch1">
+
+<!-- ==================== PART 1 HEADER ==================== -->
+<div class="part-header">
+  <div class="part-number">PART 1</div>
+  <h1>마인드셋</h1>
+  <p class="part-subtitle">코드를 모르는 사람이 15만 줄을 만드는 이유</p>
+</div>
+
+<!-- ============================================
+     CHAPTER 1: 디렉터라는 자리
+     ============================================ -->
+<div class="chapter" id="ch1">
+  <h1>Ch.1 디렉터라는 자리</h1>
+  <div class="chapter-meta">
+    <span>약 8분</span>
+    <span>난이도
+      <span class="difficulty">
+        <span class="bar active"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </span>
+  </div>
+
+  <p>이 책에서 가장 중요한 말을 먼저 할게.</p>
+  <p><strong>너는 코더가 아니야. 디렉터야.</strong></p>
+  <p>코드를 짜는 건 AI가 해. 너는 "뭘 만들지" 방향을 정하고,<br>
+  "이게 맞는지" 눈으로 확인하는 사람이야.<br>
+  영화 촬영장에서 조감독이 촬영 계획을 짜면 디렉터가 "OK" 또는 "다시!"를 말하잖아.<br>
+  그거랑 똑같아.</p>
+
+  <!-- What vs How -->
+  <h2>"뭘 원해"로 말해. "어떻게 해"로 말하지 마.</h2>
+
+  <div class="analogy-box">
+    <p>음식점에서 주방장한테 이렇게 말하면 이상하잖아:<br>
+    "감자를 1mm로 채 썰어서 180도 기름에 3분 40초 튀겨줘."</p>
+    <p>그냥 <strong>"바삭한 감자튀김 주세요"</strong>라고 하면 돼.<br>
+    주방장은 전문가니까, 최선의 방법을 알아서 쓸 거야.</p>
+    <p>AI한테도 똑같아. "How"(어떻게)를 말하면<br>
+    AI가 더 좋은 방법을 생각할 여지를 없애버려.</p>
+  </div>
+
+  <p>실제로 우리가 41일 동안 겪은 것들을 정리하면 이렇게 돼:</p>
+
+  <table>
+    <thead>
+      <tr><th>How (이렇게 하면 안 돼)</th><th>What (이렇게 해)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>"partial(파셜, 부분 파일)로 쪼개야 하나?"</td><td>"이 파일 너무 커진 것 같은데 괜찮아?"</td></tr>
+      <tr><td>"해시에 이 필드 포함해야 해?"</td><td>"설정 바꿨는데 왜 반영이 안 돼?"</td></tr>
+      <tr><td>"Dictionary 대신 List 써야 하나?"</td><td>"이거 점점 느려지는 것 같은데?"</td></tr>
+      <tr><td>"isRandom 체크를 프로퍼티로?"</td><td>"Random이랑 Sequential이 다르게 동작하는데?"</td></tr>
+      <tr><td>"OnEnable에서 초기화해야 하나?"</td><td>"씬 열 때마다 이게 초기화 안 돼 있어"</td></tr>
+      <tr><td>"캐시를 무효화해야 하나?"</td><td>"아까 바꾼 게 반영 안 된 것 같아"</td></tr>
+      <tr><td>"static(스태틱, 고정값) 필드를 리셋해야 하나?"</td><td>"유니티 다시 시작하면 이전 값이 남아 있어"</td></tr>
+      <tr><td>"Undo(언두, 되돌리기) 순서를 바꿔야 하나?"</td><td>"Ctrl+Z 하면 이상하게 돌아가"</td></tr>
+      <tr><td>"이벤트 구독을 해제해야 하나?"</td><td>"이 기능 끄고 다른 거 했는데 아직 반응해"</td></tr>
+      <tr><td>"A*(에이스타, 최단 경로 알고리즘) 반복 상한을 줄여야 하나?"</td><td>"가끔 화면이 뚝 끊겨"</td></tr>
+    </tbody>
+  </table>
+
+  <p>왼쪽은 <strong>주방장한테 레시피를 지시하는 거</strong>야. 오른쪽은 <strong>손님이 느낀 걸 말하는 거</strong>야.<br>
+  오른쪽으로 말하면 AI가 모든 기술적 가능성을 열어두고 최선의 답을 찾아와.</p>
+
+  <div class="warning-box">
+    <p><strong>How를 먼저 말하면 AI의 해결 범위를 좁히는 독약이야.</strong><br>
+    "partial(파셜)로 쪼개야 하나?"라고 물으면 AI는 "네/아니오"만 대답해.<br>
+    "파일이 너무 커진 것 같아"라고 하면 AI가 "partial(파셜) 분할이 좋겠어, 이유는..."까지 설명해줘.</p>
+  </div>
+
+  <!-- 찜찜함 -->
+  <h2>찜찜함 = 최고의 버그 리포트</h2>
+
+  <div class="analogy-box">
+    <p>건물에서 연기 냄새가 나. 불은 안 보여.<br>
+    이때 "괜찮겠지" 하고 넘기면? 큰일 날 수 있어.<br>
+    "뭔가 타는 냄새 나는데?" 한 마디만 하면? 소방관이 알아서 찾아줘.</p>
+    <p><strong>찜찜함은 연기 탐지기야.</strong> 불이 어디 있는지 몰라도 돼.<br>
+    냄새만 맡으면 돼.</p>
+  </div>
+
+  <p>실제로 Bobby가 "찜찜하다"고 한 마디 한 것들이 어떻게 됐는지 봐:</p>
+
+  <table>
+    <thead>
+      <tr><th>Bobby의 한 마디</th><th>결과</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>"WP(더블유피, 웨이포인트 — 경유점)가 안 타"</td><td>Segment Stitching(세그먼트 스티칭, 경로 조각 이어붙이기) 아키텍처 탄생 (15만 줄 시스템의 핵심 구조 변경)</td></tr>
+      <tr><td>"에이전트가 GW에서 멈춰"</td><td>A*(에이스타) 예산 시스템 + 좀비 가드 추가</td></tr>
+      <tr><td>"도로가 안 보여"</td><td>corridor(코리도, 복도 경로) excludedCells 버그 발견</td></tr>
+      <tr><td>"이거 점점 느려지는 것 같아"</td><td>A*(에이스타) 75회 호출을 1회로 줄이는 최적화</td></tr>
+      <tr><td>"코드가 커져서 걱정돼"</td><td>파일 구조 전면 재설계 (SLV 파티션)</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>코드 한 줄 안 읽고도 16만 줄 시스템의 구조 결함을 찾아내는 디렉터.</strong><br>
+  이게 바로 너의 자리야.</p>
+
+  <div class="highlight-box">
+    <h3>디렉터와 조감독의 관계</h3>
+    <p>디렉터가 "이 장면은 슬프게 가자"고 하면,<br>
+    조감독이 "조명 톤 낮추고, 카메라 느리게, 음악 빼겠습니다"라고 해.<br>
+    디렉터가 "카메라를 35mm로 바꾸고 3초 틸트업 해"라고 하면?<br>
+    촬영감독보다 기술을 모르는 디렉터가 촬영을 제한하는 거야.</p>
+    <p><strong>"What"을 말하면 크루가 최선의 "How"를 가져와.<br>
+    "How"를 말하면 크루가 거기에 갇혀.</strong></p>
+  </div>
+
+  <!-- 퀴즈 -->
+  <div class="quiz">
+    <p class="question"><strong>Q1. 이 중 What으로 말하는 건 뭘까?</strong></p>
+    <p>A. "이 Dictionary를 ConcurrentDictionary로 바꿔줘"<br>
+    B. "여러 에이전트가 동시에 지나가면 가끔 튕겨"<br>
+    C. "for 루프를 foreach로 바꿔줘"</p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>B.</strong> "여러 에이전트가 동시에 지나가면 가끔 튕겨"가 What이야.<br>
+      증상(느낌)을 말했지, 해결 방법(How)을 지정하지 않았으니까.<br>
+      A와 C는 구체적인 코드 수정 방법을 지시하는 거야 — How.</p>
+    </details>
+
+    <div class="next-question">
+    <p class="question"><strong>Q2. Bobby가 "아까 바꾼 게 반영 안 된 것 같아"라고 했어. 이건?</strong></p>
+    <p>A. 기술적 지시 (How)<br>
+    B. 느낌 전달 (What)</p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>B.</strong> "반영 안 된 것 같아"는 느낌이야.<br>
+      AI가 이걸 듣고 "캐시 문제인지, 해시 문제인지, 저장 순서 문제인지" 전부 확인할 수 있어.</p>
+    </details>
+    </div>
+
+    <div class="next-question">
+    <p class="question"><strong>Q3. "이벤트 구독을 해제해야 해?"라고 물었어. 뭐가 문제야?</strong></p>
+    <details open>
+      <summary>정답</summary>
+      <p>AI한테 해결책(How)을 먼저 제시한 거야.<br>
+      "이 기능 끄고 다른 거 했는데 아직 반응해"라고 하면<br>
+      AI가 이벤트 구독 해제가 답인지, 아니면 다른 문제인지까지 확인해줘.<br>
+      How를 말하면 AI는 "네, 해제하세요"에서 끝나.</p>
+    </details>
+    </div>
+  </div>
+
+  <div class="chapter-summary">
+    <h4>이 챕터 정리</h4>
+    <ul>
+      <li>너는 코더가 아니라 디렉터야</li>
+      <li>"어떻게"(How)가 아니라 "뭘 원해"(What)로 말해</li>
+      <li>찜찜함은 최고의 버그 리포트 — 연기만 맡으면 소방관이 불을 찾아줘</li>
+      <li>2권은 "프롬프트 기법", 3권은 "마인드셋" — 기법보다 자세가 먼저야</li>
+    </ul>
+    <p class="next-preview">AI 크루 싸움 붙이기 — 왜 AI 하나보다 둘이 나은지</p>
+  </div>
+</div>
+
+
+<!-- ============================================
+     CHAPTER 2: AI 크루 싸움 붙이기
+     ============================================ -->
+<div class="tab-panel" id="panel-ch2">
+<div class="chapter" id="ch2">
+  <h1>Ch.2 AI 크루 싸움 붙이기</h1>
+  <div class="chapter-meta">
+    <span>약 12분</span>
+    <span>난이도
+      <span class="difficulty">
+        <span class="bar active"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </span>
+  </div>
+
+  <p>AI 하나로도 충분하다고? 맞아, 충분할 때도 있어.<br>
+  근데 프로젝트가 커지면 <strong>혼자선 놓치는 게 생겨</strong>.<br>
+  그래서 우리는 AI를 두 명 붙였어.</p>
+
+  <!-- 프로덕션 크루 -->
+  <h2>프로덕션 크루: 디렉터 + 스카우터 + 촬영감독</h2>
+
+  <div class="analogy-box">
+    <p>영화 촬영을 생각해봐.</p>
+    <ul>
+      <li><strong>디렉터</strong> — "이런 분위기의 장면이 필요해" (방향 설정)</li>
+      <li><strong>스카우터</strong>(로케이션 헌터) — "로케이션 50곳 봤는데 여기 5곳이 괜찮아!" (넓게 탐색, 후보 제시)</li>
+      <li><strong>촬영감독</strong>(DP) — "5곳 중 조명/각도 확인해보니 진짜 쓸 만한 건 2곳이야" (정밀 검증)</li>
+    </ul>
+    <p>스카우터가 없으면 촬영감독이 어디서 찍을지 몰라.<br>
+    촬영감독이 없으면 스카우터가 찾은 장소가 진짜 괜찮은지 확인 못 해.<br>
+    <strong>디렉터가 없으면 둘 다 방향을 잃어.</strong></p>
+  </div>
+
+  <p>우리 팀에서는 이렇게 역할을 나눴어:</p>
+
+  <table>
+    <thead>
+      <tr><th>역할</th><th>누가</th><th>하는 일</th><th>강점</th><th>한계</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>디렉터</strong></td>
+        <td>Bobby (너)</td>
+        <td>방향 설정 + 모니터로 확인 + "OK!/다시!"</td>
+        <td>감각, 직감, 눈</td>
+        <td>코드 세부</td>
+      </tr>
+      <tr>
+        <td><strong>스카우터</strong></td>
+        <td>Antigravity</td>
+        <td>520파일 전체 훑기 + 후보 리스트 작성</td>
+        <td>넓은 시야</td>
+        <td>오탐 80%</td>
+      </tr>
+      <tr>
+        <td><strong>촬영감독</strong></td>
+        <td>Claude</td>
+        <td>후보 검증 + 진짜만 남기기 + 코드 수정</td>
+        <td>정밀 촬영</td>
+        <td>시야 좁음</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warning-box">
+    <p><strong>스카우터가 추천한 10곳 중 8곳은 실제로 가보면 안 맞아.</strong><br>
+    이게 정상이야. 넓게 보는 게 스카우터 역할이니까.<br>
+    촬영감독이 "진짜 쓸 만한 건 2곳이야"라고 걸러주는 게 핵심이야.</p>
+  </div>
+
+  <div class="connection-box">
+    <p><strong>Antigravity의 역할</strong></p>
+    <p>Claude가 "실행팀"이라면, Antigravity는 "감시팀"이야.<br>
+    Claude가 코드를 쓰면 Antigravity가 검증하고,<br>
+    Antigravity가 설계를 제안하면 Claude가 구현해.<br>
+    두 AI가 서로를 견제하니까 품질이 올라가는 거야.<br>
+    "같은 회사 감사팀과 실행팀"이라고 생각하면 돼.</p>
+  </div>
+
+  <!-- 오탐 데이터 -->
+  <h2>실제 숫자로 보자</h2>
+
+  <p>우리가 41일 동안 실제로 겪은 숫자야:</p>
+
+  <table>
+    <thead>
+      <tr><th>상황</th><th>처음 보고</th><th>진짜 문제</th><th>헛소리 비율</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>규칙 위반 스캔 (SSoT(에스에스오티, 단일 원본))</td><td>5건</td><td>1건</td><td>80%</td></tr>
+      <tr><td>성능 병목 스캔</td><td>18곳</td><td>3곳</td><td>83%</td></tr>
+      <tr><td>전체 코드 공방</td><td>136건</td><td>20건</td><td>85%</td></tr>
+      <tr><td>2차 전수 스캔 (393파일)</td><td>112건</td><td>18건</td><td>84%</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>AI 혼자 "이거 문제야!"라고 한 것 중 진짜 문제는 10개 중 2개뿐이야.</strong><br>
+  나머지 8개를 걸러내는 게 교차검증이야.</p>
+
+  <div class="analogy-box">
+    <p><strong>병원에서 진단받는 것과 같아.</strong></p>
+    <p>의사 한 명이 X-Ray 보고 "이상 소견 5개"라고 해.<br>
+    다른 전문의가 확인하면 "진짜 문제는 1개, 나머지는 정상 변이"라고 해.<br>
+    <strong>세컨드 오피니언</strong> 없이 바로 수술했으면? 4번 헛수술한 거야.</p>
+  </div>
+
+  <!-- 1인 크루 -->
+  <h2>AI 하나밖에 없을 때 — 1인 크루</h2>
+
+  <p>스카우터 없이 촬영감독(Claude)이 혼자 로케 헌팅 + 촬영을 겸하는 거야.<br>
+  그래도 교차검증 할 수 있어. <strong>새 세션</strong>을 열면 돼.</p>
+
+  <p>같은 Claude라도 세션이 다르면 다른 각도로 봐.<br>
+  첫 번째 세션에서 "이거 문제야"라고 한 걸<br>
+  두 번째 세션에서 "진짜야? 확인해봐"라고 시키면 돼.</p>
+
+  <p>우리도 실제로 이렇게 했어:</p>
+  <ul>
+    <li>5개 세션을 동시에 열어서 각각 다른 영역을 스캔</li>
+    <li>한 세션이 찾은 걸 다른 세션이 검증</li>
+    <li>결과: 한 세션이 놓친 CRITICAL 버그를 다른 세션이 발견</li>
+  </ul>
+
+  <!-- SSoT 시나리오 -->
+  <h2>5건이 1건이 되는 이야기</h2>
+
+  <p>실제로 있었던 일이야.</p>
+
+  <p>Antigravity가 코드 전체를 훑고 와서 이렇게 보고했어:<br>
+  <strong>"규칙 위반 5건 발견했습니다."</strong></p>
+
+  <p>Bobby가 이걸 Claude에게 넘겼어. "진짜야? 확인해봐."</p>
+
+  <p>Claude가 5건을 하나하나 뜯어봤어:</p>
+  <ul>
+    <li>1번: "이건 이미 다른 곳에서 보호하고 있어. 정상."</li>
+    <li>2번: "에디터에서만 돌아가는 코드야. 런타임 문제 아님."</li>
+    <li>3번: "주석에 '의도적'이라고 써 있어. 설계 의도야."</li>
+    <li>4번: "Unity 엔진이 알아서 처리하는 부분이야."</li>
+    <li><strong>5번: "이건 진짜 문제야. 수정 필요."</strong></li>
+  </ul>
+
+  <p>Antigravity가 5건을 찾은 건 잘한 거야. 그 중에 진짜 1건이 있었으니까.<br>
+  근데 <strong>5건 전부 수정했으면? 4건은 멀쩡한 코드를 건드린 거야.</strong><br>
+  멀쩡한 코드를 건드리면 새 버그가 생겨.</p>
+
+  <div class="analogy-box">
+    <p><strong>화재 경보가 울렸을 때.</strong></p>
+    <p>경보가 5번 울렸어. 매번 소방차가 와.<br>
+    확인해보니 4번은 요리 연기, 1번만 진짜 불이었어.<br>
+    그렇다고 경보기를 끄면 안 돼. 진짜 불을 놓치니까.<br>
+    <strong>경보가 울리면 확인하되, 바로 물 뿌리지 마.</strong></p>
+  </div>
+
+  <!-- Bobby가 할 것 -->
+  <h2>Bobby가 할 건 딱 하나야</h2>
+
+  <p>AI 둘이 논의한 다음에 Bobby한테 올라와.<br>
+  Bobby는 한 마디만 하면 돼:</p>
+
+  <p style="font-size: 1.3rem; text-align: center; font-weight: 700; margin: var(--gap-lg) 0;">
+  "진짜야?"</p>
+
+  <p>이 한 마디가 80%의 헛소리를 걸러내는 마법의 말이야.<br>
+  AI가 "확실합니다!"라고 해도 한 번 더 물어봐. "진짜야?"<br>
+  그러면 AI가 다시 한번 확인하고, 확신이 없으면 솔직하게 말해.</p>
+
+  <p>그리고 최종 확인은 <strong>유니티에서 눈으로</strong>. 이건 기계가 절대 못해.<br>
+  "느낌이 맞나?"를 판단하는 건 디렉터의 특권이야.</p>
+
+  <!-- 퀴즈 -->
+  <div class="quiz">
+    <p class="question"><strong>AI가 코드에서 버그 10개를 찾았대. 진짜는 몇 개일까?</strong></p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>2~3개.</strong> 우리 경험상 AI 단독 분석의 정확도는 15~20%야.<br>
+      10개 중 7~8개는 멀쩡한 코드를 "수상하다"고 신고한 거야.<br>
+      그래서 반드시 교차검증(다른 AI나 새 세션)이 필요해.</p>
+    </details>
+  </div>
+
+  <div class="connection-box">
+    <p>판단을 기록하는 구체적 방법(확정/조건부/오탐/미확정)은 <strong>2권 Ch.3</strong>에서 배울 수 있어.</p>
+  </div>
+
+  <div class="chapter-summary">
+    <h4>이 챕터 정리</h4>
+    <ul>
+      <li>프로덕션 크루: 디렉터(방향) + 스카우터(넓게 탐색) + 촬영감독(정밀 검증)</li>
+      <li>AI 단독 분석은 10개 중 8개가 헛소리 &mdash; 교차검증 필수</li>
+      <li>AI 하나만 있어도 새 세션으로 교차검증 가능</li>
+      <li>Bobby가 할 건 "진짜야?" 한 마디 + 유니티에서 눈으로 확인</li>
+    </ul>
+    <p class="next-preview">우리 팀 규칙서 만들기 &mdash; CLAUDE.md가 뭐고 왜 필요한지</p>
+  </div>
+</div>
+
+
+</div>
+<div class="tab-panel" id="panel-ch3">
+
+<!-- ==================== PART 2 HEADER ==================== -->
+<div class="part-header">
+  <div class="part-number">PART 2</div>
+  <h1>세팅하기</h1>
+  <p class="part-subtitle">AI 크루가 일할 수 있는 환경 만들기</p>
+</div>
+
+<!-- ============================================
+     CHAPTER 3: 우리 팀 규칙서 만들기
+     ============================================ -->
+<div class="chapter" id="ch3">
+  <h1>Ch.3 우리 팀 규칙서 만들기</h1>
+  <div class="chapter-meta">
+    <span>약 8분</span>
+    <span>난이도
+      <span class="difficulty">
+        <span class="bar active"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </span>
+  </div>
+
+  <p>새 알바가 첫날 출근하면 뭘 받아? <strong>매뉴얼.</strong><br>
+  "음료는 이렇게 만들어", "재고는 여기 확인해", "손님 불만은 이렇게 처리해."</p>
+
+  <p>AI한테도 매뉴얼이 필요해. 그게 <strong>CLAUDE.md</strong>야.<br>
+  이 파일 하나가 AI의 행동을 결정해.</p>
+
+  <h2>규칙 없던 시절 vs 있은 후</h2>
+
+  <div class="analogy-box">
+    <p>교통 규칙이 없는 도시를 상상해봐.<br>
+    신호등도 없고, 우선순위도 없어. 차가 마구 움직여.<br>
+    사고가 매일 터져.</p>
+    <p>규칙을 만들면? "빨간불에 멈춰", "우회전은 신호 확인 후."<br>
+    사고가 확 줄어. 근데 규칙이 너무 많으면? "좌회전은 화요일만 허용"<br>
+    <strong>아무도 안 지켜.</strong></p>
+  </div>
+
+  <p>우리 프로젝트에서 실제로 일어난 일:</p>
+
+  <table>
+    <thead>
+      <tr><th>상황</th><th>규칙 없던 시절</th><th>규칙 있은 후</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>안전장치 빠뜨리기 (delayCall(딜레이콜, 지연 실행 명령))</td>
+        <td>4건 동시 발견 (감사 때)</td>
+        <td>0건 (규칙이 자동 방지)</td>
+      </tr>
+      <tr>
+        <td>스타일 일괄 변경</td>
+        <td>963건 마이그레이션 → UI 전체 깨짐 → 86파일 되돌림</td>
+        <td>규칙 53으로 금지 → 재발 0</td>
+      </tr>
+      <tr>
+        <td>모드 전환 후 상태 잔류</td>
+        <td>6건 연속 발생 (#3~#7)</td>
+        <td>EnterMode(엔터모드, 모드 진입)/ExitMode(엔터모드/엑싯모드, 모드 진입/퇴장) 쌍 규칙 → 거의 0</td>
+      </tr>
+      <tr>
+        <td>같은 문제 반복 접근</td>
+        <td>도로 오버레이 5세션, 입력 문제 8번</td>
+        <td>memory에 "이 길은 막힘" 기록 → 반복 감소</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>좋은 규칙 vs 나쁜 규칙</h2>
+
+  <table>
+    <thead>
+      <tr><th>좋은 규칙</th><th>나쁜 규칙</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>"파일이 500줄 넘으면 쪼개"</td><td>"파일은 무조건 200줄 이하"</td></tr>
+      <tr><td>"모드 끝낼 때 상태 변수 정리해"</td><td>"전역 변수 금지"</td></tr>
+      <tr><td>"D3D12(디쓰리디트웰브, 최신 그래픽 처리 방식) 쓰지 마 (화면 깨짐)"</td><td>"새 기술 시도하지 마"</td></tr>
+      <tr><td>"인라인 스타일 일괄 변경 금지"</td><td>"인라인 스타일 절대 금지"</td></tr>
+    </tbody>
+  </table>
+
+  <p>좋은 규칙의 특징:</p>
+  <ul>
+    <li><strong>구체적</strong> — "500줄"이라는 숫자가 있어</li>
+    <li><strong>이유가 있어</strong> — 왜 안 되는지 설명돼 있어</li>
+    <li><strong>지킬 수 있어</strong> — 너무 빡빡하지 않아</li>
+  </ul>
+
+  <p>나쁜 규칙의 특징:</p>
+  <ul>
+    <li><strong>너무 추상적</strong> — "좋은 코드를 짜라" (뭐가 좋은 건데?)</li>
+    <li><strong>이유가 없어</strong> — "그냥 이렇게 해" (왜?)</li>
+    <li><strong>현실 무시</strong> — A*(에이스타) 경로 계산은 변수만으로 500줄 넘어</li>
+  </ul>
+
+  <!-- 큰 그물 + 촘촘한 그물 -->
+  <h2>큰 그물 + 촘촘한 그물</h2>
+
+  <p>우리 규칙은 2계층 구조야.</p>
+
+  <h3>큰 그물: 절대 규칙 5개 (어떤 상황에서도)</h3>
+  <ol>
+    <li><strong>기능은 최소 코드로 동작 먼저</strong> — 안 시킨 거 추가하지 마</li>
+    <li><strong>수정 → 테스트 → 확인 → 다음</strong> — 한꺼번에 여러 개 하지 마</li>
+    <li><strong>모드 전환은 Enter + Exit 쌍으로</strong> — 안 쓰는 상태 남기지 마</li>
+    <li><strong>GC(가비지) 만들지 마, 캐시 써</strong> — 성능은 기본</li>
+    <li><strong>보호 파일은 규칙 번호 명시 후 수정</strong> — 함부로 건드리지 마</li>
+  </ol>
+
+  <h3>촘촘한 그물: 상황별 규칙 (구체적 지뢰)</h3>
+  <ul>
+    <li>"D3D12(디쓰리디트웰브) 쓰지 마" (규칙 23) — 화면 깨짐</li>
+    <li>"delayCall(딜레이콜) 콜백 첫 줄에 null(널, 값 없음) 체크" (규칙 E4) — 크래시 방지</li>
+    <li>"해시에 새 필드 추가했으면 캐시도 갱신" — 설정 반영 안 되는 버그 방지</li>
+    <li>"인라인 스타일 일괄 마이그레이션 금지" (규칙 53) — UI 파괴 방지</li>
+  </ul>
+
+  <p>왜 2계층이냐면, <strong>큰 원칙만 5개 있으면 구체적 지뢰를 못 막아.</strong><br>
+  "좋은 코드를 짜라"로는 D3D12(디쓰리디트웰브) 금지를 못 잡아.<br>
+  반대로 구체적 규칙만 53개 있으면 새로운 상황에서 판단 기준이 없어.</p>
+
+  <!-- 실전 연습 -->
+  <h2>규칙 하나 만들어보기</h2>
+
+  <p>만약 이런 문제가 반복된다면:</p>
+  <p><em>"Ctrl+Z 하면 이상하게 돌아가."</em> (3번 발생)</p>
+
+  <div class="template-box">
+    <h4>규칙 만들기 템플릿</h4>
+    <p><strong>문제:</strong> <span class="placeholder">[Ctrl+Z 하면 UI가 이상하게 복원됨]</span></p>
+    <p><strong>원인:</strong> <span class="placeholder">[값을 바꾸기 전에 Undo(언두) 기록을 안 남김]</span></p>
+    <p><strong>규칙:</strong> <span class="placeholder">[값 바꾸기 전에 반드시 Undo(언두).RecordObject 호출]</span></p>
+    <p><strong>확인법:</strong> <span class="placeholder">[수정 후 Ctrl+Z 3번 해보기]</span></p>
+  </div>
+
+  <p>이걸 CLAUDE.md에 적어두면, AI가 다음부터 자동으로 Undo(언두) 기록을 남겨.</p>
+
+  <div class="quiz">
+    <p class="question"><strong>같은 문제가 3번 터졌어. 어떻게 해?</strong></p>
+    <p>A. 매번 수정한다<br>
+    B. 규칙을 만들어서 CLAUDE.md에 적는다<br>
+    C. AI를 바꾼다</p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>B.</strong> 같은 문제가 3번 터지면 패턴이야.<br>
+      규칙으로 만들면 AI가 앞으로 자동으로 피해.<br>
+      우리 프로젝트에서도 delayCall(딜레이콜) 가드를 규칙화한 뒤로 재발 0건이야.</p>
+    </details>
+  </div>
+
+  <div class="chapter-summary">
+    <h4>이 챕터 정리</h4>
+    <ul>
+      <li>CLAUDE.md = 새 직원 첫날 매뉴얼</li>
+      <li>좋은 규칙: 구체적 + 이유 있음 + 지킬 수 있음</li>
+      <li>2계층 구조: 절대 원칙 5개 + 상황별 구체 규칙</li>
+      <li>같은 문제 3번 → 규칙 만들기</li>
+    </ul>
+    <p class="next-preview">AI가 안 까먹게 하기 — 세션 관리와 인수인계 노트</p>
+  </div>
+</div>
+
+
+<!-- ============================================
+     CHAPTER 4: AI가 안 까먹게 하기
+     ============================================ -->
+<div class="tab-panel" id="panel-ch4">
+<div class="chapter" id="ch4">
+  <h1>Ch.4 AI가 안 까먹게 하기</h1>
+  <div class="chapter-meta">
+    <span>약 8분</span>
+    <span>난이도
+      <span class="difficulty">
+        <span class="bar active"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </span>
+  </div>
+
+  <p>2권에서 "Claude는 천재인데 기억상실"이라고 했어.<br>
+  3권에서는 <strong>그래서 어떻게 관리하는지</strong>를 알려줄게.</p>
+
+  <!-- 파일 쪼개기 -->
+  <h2>"파일 긴 것 같아" 한 마디면 끝</h2>
+
+  <div class="analogy-box">
+    <p>서랍이 하나인 책상을 상상해봐. 서류가 500장 들어 있어.<br>
+    "계약서 어딨지?" 찾으려면 500장을 다 뒤져야 해.</p>
+    <p>서랍을 5개로 나누면? "계약서는 세 번째 서랍"이라고 알면 100장만 보면 돼.<br>
+    <strong>내용은 똑같아. 정리만 달라진 거야.</strong></p>
+  </div>
+
+  <p>코드 파일도 똑같아. 한 파일이 800줄이 넘으면 AI도 헷갈려.<br>
+  이때 너는 이렇게만 말하면 돼:</p>
+
+  <p style="font-size: 1.1rem; text-align: center; font-weight: 600; margin: var(--gap-lg) 0;">
+  "이 파일 너무 커진 것 같은데 괜찮아?"</p>
+
+  <p>그러면 AI가 알아서 쪼개줘. 변수는 한 곳에 모으고, 기능별로 나눠서.<br>
+  우리 프로젝트에서도 800줄짜리 파일 5개를 이렇게 쪼갰어.<br>
+  Bobby는 코드를 안 봤어. "커 보여"라고만 했어.</p>
+
+  <!-- memory -->
+  <h2>인수인계 노트 = memory/</h2>
+
+  <div class="analogy-box">
+    <p>편의점에서 교대 근무한다고 생각해봐.<br>
+    밤 근무자가 퇴근하면서 아침 근무자한테 메모를 남겨:<br>
+    "3번 냉장고 고장. 수리 업체 내일 옴. 우유는 2번으로 옮겨놨음."</p>
+    <p>이 메모가 없으면? 아침 근무자가 처음부터 다시 파악해야 해.<br>
+    "어? 3번 냉장고 왜 비어 있지?" → 고객한테 물어보고 → 업체 전화하고...<br>
+    <strong>이미 해결된 문제를 또 해결하는 거야.</strong></p>
+  </div>
+
+  <p><code>memory/</code> 폴더가 바로 이 인수인계 노트야.<br>
+  AI 세션이 바뀔 때마다 이전에 뭘 했고, 뭘 배웠는지 적혀 있어.</p>
+
+  <p>우리 프로젝트에서 memory/에 뭘 적어뒀냐면:</p>
+  <ul>
+    <li><strong>교훈</strong> — "이 방법은 안 되더라. 6일 날리고 결국 제거했어"</li>
+    <li><strong>규칙</strong> — "delayCall(딜레이콜)에 null(널) 체크 넣어야 돼"</li>
+    <li><strong>에피소드</strong> — "WP(더블유피) 경로 경유 실패 → 이렇게 해결했어"</li>
+    <li><strong>피드백</strong> — "Bobby가 이런 피드백 줬어"</li>
+  </ul>
+
+  <p>이게 없었으면? 도로 오버레이 문제를 5세션에서 반복하는 게 10세션이 됐을 거야.</p>
+
+  <!-- 세션 끊기 -->
+  <h2>세션 끊기 — 디렉터의 판단</h2>
+
+  <p>세션을 언제 끊는지(2번 반복 / 합의 위반 / 5파일 수정)는 <strong>2권 Ch.3</strong>에서 자세히 다뤘어.<br>
+  여기서는 <strong>디렉터가 왜 끊는 결정을 직접 해야 하는지</strong>만 짚을게.</p>
+
+  <p><strong>AI는 이전 시도에 갇히는 경향이 있어.</strong><br>
+  한 세션에서 "이 방법으로 해보자" → 실패 → "다시 해보자" → 또 같은 방법...<br>
+  AI 스스로는 "내가 갇혔다"를 잘 모름. 끊는 건 디렉터만 할 수 있는 판단이야.</p>
+
+  <div class="connection-box">
+    <p><strong>실제 사례:</strong> Theta*(세타스타, 시야 기반 길찾기) 알고리즘을 6일 동안 붙잡았어.<br>
+    세션을 바꾸고 나서야 "데이터 구조를 바꾸면 되잖아?"라는 답이 나왔어.<br>
+    결국 Theta*(세타스타)는 전부 삭제하고, 더 간단한 방법으로 해결했어.<br>
+    <strong>끊는 타이밍을 놓치면 6일을 날려.</strong></p>
+  </div>
+
+  <!-- 퀴즈 -->
+  <div class="quiz">
+    <p class="question"><strong>세션 끊어야 할까? 상황 판단해봐.</strong></p>
+
+    <p><strong>상황 1:</strong> AI가 "이건 못 고치겠어"라고 했다가 "다시 해볼게"라고 하는데,
+    같은 코드를 또 보고 있어.</p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>끊어야 해.</strong> 같은 문제를 같은 방법으로 2번째 시도하고 있어.<br>
+      새 세션에서 다른 접근법을 찾을 확률이 높아.</p>
+    </details>
+
+    <div class="next-question">
+    <p><strong>상황 2:</strong> AI가 파일 3개를 수정했고, 아직 테스트 안 했어.</p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>아직 안 끊어도 돼.</strong> 먼저 유니티에서 테스트해.<br>
+      문제없으면 계속 진행, 문제 있으면 그때 판단해.</p>
+    </details>
+    </div>
+
+    <div class="next-question">
+    <p><strong>상황 3:</strong> AI가 "이 파일은 건드리지 말자"라고 합의했는데,
+    방금 그 파일을 수정했어.</p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>끊어야 해.</strong> 합의를 위반했으면 이 세션의 맥락이 꼬인 거야.<br>
+      수정을 되돌리고 새 세션에서 다시 시작해.</p>
+    </details>
+    </div>
+  </div>
+
+  <div class="chapter-summary">
+    <h4>이 챕터 정리</h4>
+    <ul>
+      <li>"파일 긴 것 같아" 한 마디면 AI가 알아서 쪼개줘</li>
+      <li>memory/ = 교대 근무 인수인계 노트</li>
+      <li>세션 끊기 신호는 2권 참조 — 핵심은 "끊는 판단은 디렉터만 할 수 있다"</li>
+      <li>AI는 이전 시도에 갇혀 — 끊는 타이밍을 놓치면 며칠을 날려</li>
+    </ul>
+    <p class="next-preview">프로젝트 시작부터 끝까지 — 실전 파이프라인</p>
+  </div>
+</div>
+
+
+</div>
+<div class="tab-panel" id="panel-ch5">
+
+<!-- ==================== PART 3 HEADER ==================== -->
+<div class="part-header">
+  <div class="part-number">PART 3</div>
+  <h1>실전</h1>
+  <p class="part-subtitle">프로젝트를 시작부터 끝까지 운영하는 법</p>
+</div>
+
+<!-- ============================================
+     CHAPTER 5: 프로젝트 시작부터 끝까지
+     ============================================ -->
+<div class="chapter" id="ch5">
+  <h1>Ch.5 프로젝트 시작부터 끝까지</h1>
+  <div class="chapter-meta">
+    <span>약 15분</span>
+    <span>난이도
+      <span class="difficulty">
+        <span class="bar active"></span>
+        <span class="bar active"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </span>
+  </div>
+
+  <p>지금까지 마인드셋이랑 세팅을 배웠어.<br>
+  이제 <strong>실제로 프로젝트를 어떻게 진행하는지</strong> 처음부터 끝까지 보여줄게.</p>
+
+  <!-- Vibe Pipeline -->
+  <h2>4단계 파이프라인</h2>
+
+  <p>모든 기능은 이 4단계로 만들어져:</p>
+
+  <div class="workflow-step">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h4>"이런 기능 원해"</h4>
+      <span class="step-who bobby">BOBBY</span>
+      <p>UX(유엑스, 사용자 경험) 목표만 말해. 코드 용어 없이.<br>
+      <em>"웨이포인트 드래그하면 영역이 실시간으로 커졌으면 좋겠어. 버벅거리면 안 돼."</em></p>
+    </div>
+  </div>
+
+  <div class="workflow-step">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h4>로케이션 헌팅 + 후보 리스트</h4>
+      <span class="step-who claude-tag">스카우터 (또는 Claude 겸임)</span>
+      <p>코드 전체를 훑고 "이 파일들을 수정해야 해"라는 리스트를 만들어.<br>
+      <em>"수정 대상: A, B, C 파일. 부작용 주의: D 파일."</em></p>
+    </div>
+  </div>
+
+  <div class="workflow-step">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h4>후보 검증 + 촬영(구현)</h4>
+      <span class="step-who claude-tag">촬영감독 (Claude)</span>
+      <p>후보 파일을 하나하나 뜯어보고, 진짜만 남기고, 코드를 짜.<br>
+      <em>"5건 중 3건은 정상. 나머지 2건 수정 완료."</em></p>
+    </div>
+  </div>
+
+  <div class="workflow-step">
+    <div class="step-num">4</div>
+    <div class="step-content">
+      <h4>유니티에서 확인</h4>
+      <span class="step-who bobby">BOBBY</span>
+      <p>Play(플레이, 실행) 버튼 누르고, 마우스로 만져보고, 눈으로 확인.<br>
+      <em>"됐다!" → 커밋. "0.1초 밀려" → 스카우터에게 성능 재스캔 요청.</em></p>
+    </div>
+  </div>
+
+  <div class="analogy-box">
+    <p><strong>집 리모델링이랑 같아.</strong></p>
+    <p>1단계: "부엌을 밝게 만들고 싶어" (집주인 = Bobby)<br>
+    2단계: "전기배선 확인했습니다, 이 벽은 못 뚫어요" (설계사 = 스카우터)<br>
+    3단계: "조명 설치 완료, 콘센트 위치 확인해주세요" (시공팀 = 촬영감독)<br>
+    4단계: "오, 밝아졌다! 근데 스위치가 너무 높아" (집주인이 눈으로 확인)</p>
+  </div>
+
+  <!-- 혼자 할 때 -->
+  <h2>스카우터 없이 촬영감독이 겸업할 때</h2>
+
+  <p>AI가 하나뿐이면? 2단계를 Claude가 겸임하면 돼.</p>
+  <ol>
+    <li>Bobby: "이런 기능 원해"</li>
+    <li>Claude: 스스로 코드 훑고 + 수정 대상 찾고 + 구현</li>
+    <li>Bobby: 유니티에서 확인</li>
+  </ol>
+
+  <p>이때 중요한 건 <strong>"진짜야?" 한 번 더 물어보는 거</strong>야.<br>
+  스카우터가 없으니까 Claude가 혼자 판단한 거거든.<br>
+  "이게 최선이야? 다른 방법은 없어?"라고 한 번만 물어봐.</p>
+
+  <!-- 규모별 -->
+  <h2>규모별 세팅 차이</h2>
+
+  <table>
+    <thead>
+      <tr><th></th><th>소규모 (5천 줄)</th><th>중규모 (5만 줄)</th><th>대규모 (15만 줄)</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>AI 구성</strong></td>
+        <td>AI 1개면 충분</td>
+        <td>교차검증 추천</td>
+        <td>프로덕션 크루 + 멀티세션</td>
+      </tr>
+      <tr>
+        <td><strong>규칙 수</strong></td>
+        <td>5~10개</td>
+        <td>20~30개</td>
+        <td>50개+</td>
+      </tr>
+      <tr>
+        <td><strong>인수인계 노트</strong></td>
+        <td>최소 (CLAUDE.md만)</td>
+        <td>memory/ 5~7개</td>
+        <td>memory/ 10개+</td>
+      </tr>
+      <tr>
+        <td><strong>세션 전략</strong></td>
+        <td>한 세션으로 충분</td>
+        <td>기능별 세션 분리</td>
+        <td>영역별 병렬 세션</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>작게 시작해서 키워가면 돼. 처음부터 규칙 50개 만들 필요 없어.<br>
+  <strong>문제가 터질 때마다 하나씩 추가하는 거야.</strong></p>
+
+  <div class="later-box">
+    <p><strong>규모별 전환점</strong></p>
+    <p>파일 50개 이하: Claude 1명이면 충분. 규칙서도 10줄이면 돼.</p>
+    <p>파일 100~300개: memory/ 필요. 세션 인수인계 시작.</p>
+    <p>파일 300+: 멀티세션 + Antigravity 투입 시점. CLAUDE.md 50줄+.</p>
+    <p>"언제 멀티에이전트로 전환하나?" — <strong>같은 이슈를 3번째 세션에서 또 만나면</strong>. 그때가 전환점이야.</p>
+  </div>
+
+  <!-- Day 1 -->
+  <h2>Day 1: 첫 30분</h2>
+
+  <p>새 프로젝트를 시작한다면, 첫 30분에 이것만 해:</p>
+
+  <ol>
+    <li><strong>CLAUDE.md 만들기</strong> — 프로젝트 이름, 사용 기술, 절대 규칙 3개만</li>
+    <li><strong>첫 기능 하나 말하기</strong> — "타일을 클릭하면 색이 바뀌는 거 만들어줘"</li>
+    <li><strong>유니티에서 확인</strong> — 되면 "좋아", 안 되면 "이게 안 돼"</li>
+    <li><strong>커밋</strong> — 세이브 포인트 찍어두기</li>
+  </ol>
+
+  <div class="analogy-box">
+    <p><strong>세이브 포인트</strong> — 게임에서 보스전 전에 세이브하잖아.<br>
+    커밋이 그거야. 뭔가 잘못되면 여기로 돌아올 수 있어.<br>
+    자주 찍을수록 안전해.</p>
+  </div>
+
+  <!-- 가상 시뮬레이션 -->
+  <h2>가상 시뮬레이션: 오토타일 기능 만들기</h2>
+
+  <p>실제로 해보자. "타일이 주변 타일에 맞게 자동으로 바뀌는 기능"을 만든다고 치자.</p>
+
+  <h3>1단계: Bobby가 말한다</h3>
+  <p><em>"타일을 놓으면 주변 타일이랑 자동으로 이어졌으면 좋겠어. 풀밭 타일 놓으면 옆에 있는 풀밭이랑 자연스럽게 연결되는 거."</em></p>
+
+  <h3>2단계: Claude가 분석한다</h3>
+  <p><em>"타일맵 시스템을 확인했어. Rule Tile이라는 게 Unity에 있는데, 이걸 쓰면 자동으로 주변 타일에 맞게 바뀌어. 수정할 파일은 TilePainter.cs랑 TileCatalog.cs야."</em></p>
+
+  <h3>3단계: Bobby가 확인한다</h3>
+  <p><em>"오, 된다! 근데 대각선이 좀 어색한데?"</em></p>
+
+  <h3>4단계: 반복</h3>
+  <p><em>Claude가 대각선 규칙 조정 → Bobby 확인 → "됐다!" → 커밋</em></p>
+
+  <p>이게 전부야. 복잡하지 않아.</p>
+
+  <div class="predict-box">
+    <p><strong>복잡한 시뮬레이션: "두 AI가 서로 모순되는 의견을 낼 때"</strong></p>
+    <p>Claude: "이 함수는 삭제해도 안전합니다."<br>
+    Antigravity: "이 함수는 동적 호출로 쓰이고 있어서 삭제하면 런타임 에러납니다."</p>
+    <p>디렉터 판단: <strong>Antigravity에게 증거를 요구해.</strong><br>
+    "동적 호출이 어디서 일어나는지 보여줘." 증거 있으면 Antigravity가 맞고, 없으면 오탐.</p>
+  </div>
+
+  <!-- 커밋 규칙 -->
+  <h2>커밋: "세션은 수정만, HEAD(헤드, 조율 세션)가 커밋"</h2>
+
+  <p>프로젝트가 커지면 여러 세션이 동시에 일할 때가 있어.<br>
+  이때 커밋(세이브 포인트)을 아무나 찍으면 충돌이 나.</p>
+
+  <p>우리는 3번 실패한 끝에 이 규칙을 만들었어:<br>
+  <strong>"각 세션은 코드 수정만 해. 세이브 포인트는 메인 세션이 찍어."</strong></p>
+
+  <p>편의점으로 치면, 알바생 여러 명이 동시에 금전 등록기를 만지면 안 되잖아.<br>
+  <strong>한 명만 등록기 담당, 나머지는 물건 정리만.</strong></p>
+
+  <div class="later-box">
+    <p><strong>비용 감각: AI 크루는 무료가 아니야</strong></p>
+    <p>멀티세션 = 비용 × 세션 수. 5개 세션을 동시에 돌리면 5배.</p>
+    <p>그래서 "정말 필요할 때만" 멀티세션으로. 일상적인 수정은 단일 세션이면 충분해.</p>
+  </div>
+
+  <!-- 퀴즈 -->
+  <div class="quiz">
+    <p class="question"><strong>새 프로젝트 Day 1. 가장 먼저 할 일은?</strong></p>
+    <p>A. 코드를 먼저 짠다<br>
+    B. CLAUDE.md를 만든다<br>
+    C. 규칙 50개를 먼저 정한다</p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>B.</strong> CLAUDE.md를 먼저 만들어. 프로젝트 이름, 기술, 절대 규칙 3개만.<br>
+      규칙은 처음에 3개면 충분해. 문제가 터질 때마다 하나씩 추가하면 돼.</p>
+    </details>
+  </div>
+
+  <div class="chapter-summary">
+    <h4>이 챕터 정리</h4>
+    <ul>
+      <li>4단계 파이프라인: 원해 → 스캔 → 구현 → 확인</li>
+      <li>AI 하나면 Claude가 겸임. "진짜야?" 한 번 더 물어보기</li>
+      <li>규모에 따라 세팅을 키워가 — 처음부터 풀세팅 필요 없음</li>
+      <li>Day 1: CLAUDE.md + 첫 기능 + 확인 + 커밋</li>
+      <li>커밋은 메인 세션이 전담 — 여러 명이 동시에 세이브하면 충돌</li>
+    </ul>
+    <p class="next-preview">우리가 배운 것들 — 41일 동안의 교훈</p>
+  </div>
+</div>
+
+
+<!-- ============================================
+     CHAPTER 6: 우리가 배운 것들
+     ============================================ -->
+<div class="tab-panel" id="panel-ch6">
+<div class="chapter" id="ch6">
+  <h1>Ch.6 우리가 배운 것들</h1>
+  <div class="chapter-meta">
+    <span>약 10분</span>
+    <span>난이도
+      <span class="difficulty">
+        <span class="bar active"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </span>
+  </div>
+
+  <p>41일 동안 430+커밋을 하면서 <strong>같은 종류의 실수가 반복</strong>됐어.<br>
+  정리해보니 5가지 유형으로 묶이더라.</p>
+
+  <!-- 5대 에러 -->
+  <h2>우리가 가장 많이 겪은 문제 5가지</h2>
+
+  <h3>1. "꺼놓고 나왔는데 켜져 있었어" — 상태 잔류</h3>
+
+  <div class="analogy-box">
+    <p>방을 나갈 때 불을 안 끈 거야.<br>
+    다음에 다른 방에 들어갔는데, 이전 방 불이 아직 켜져 있어.<br>
+    "어? 나 여기 불 안 켰는데 왜 밝지?"</p>
+  </div>
+
+  <p>기능 A를 켜고 쓰다가 기능 B로 넘어갔는데,<br>
+  기능 A의 설정값이 아직 남아 있어서 기능 B가 이상하게 동작하는 거야.</p>
+  <p><strong>우리 사례:</strong> 페인트 모드에서 나왔는데 페인트 상태가 남아서 6번 연속 발생 (#3~#7).</p>
+  <p><strong>해결:</strong> "방을 나갈 때 반드시 불 끄기" 규칙 — EnterMode(엔터모드)/ExitMode(엔터모드/엑싯모드) 쌍.</p>
+
+  <h3>2. "여기선 되는데 저기선 안 돼" — 이중 오케스트레이션</h3>
+
+  <div class="analogy-box">
+    <p>매장에 매니저가 두 명 있어. 둘 다 "내가 총괄이야"라고 생각해.<br>
+    한 명이 "오늘 할인 행사"라고 했는데, 다른 한 명은 몰라.<br>
+    결과? 어떤 계산대는 할인이 되고, 어떤 계산대는 안 돼.</p>
+  </div>
+
+  <p>같은 기능을 두 곳에서 따로 관리하면 서로 타이밍이 안 맞아.</p>
+  <p><strong>우리 사례:</strong> 기즈모(보조선) 리빌드를 두 파일에서 따로 판단 → 5세션 소비.</p>
+  <p><strong>해결:</strong> "매니저는 한 명만" — 결정은 한 곳에서만.</p>
+
+  <h3>3. "설정 바꿨는데 반영 안 돼" — 캐시 누락</h3>
+
+  <div class="analogy-box">
+    <p>메모장에 전화번호를 적어뒀어. 상대방이 번호를 바꿨어.<br>
+    근데 메모장은 안 고쳤어. 예전 번호로 전화하면 안 받겠지.</p>
+  </div>
+
+  <p>설정을 바꿨는데 "메모해둔 값"(캐시)이 업데이트 안 된 거야.</p>
+  <p><strong>우리 사례:</strong> 경로에 영향 주는 필드 7개를 추가했는데 해시(캐시 키)에 안 넣음 → 설정 바꿔도 경로 안 바뀜.</p>
+  <p><strong>해결:</strong> "새 설정 추가하면 메모장도 같이 고쳐" — 해시 체크리스트.</p>
+
+  <h3>4. "갑자기 터져" — 가드 누락</h3>
+
+  <div class="analogy-box">
+    <p>엘리베이터에 문 닫힘 센서가 없어.<br>
+    사람이 끼어도 그냥 닫혀. 사고 나.</p>
+  </div>
+
+  <p>예외 상황에 대한 안전장치가 없어서 갑자기 크래시 나는 거야.</p>
+  <p><strong>우리 사례:</strong> 씬 전환 후 객체가 사라졌는데, 예약된 콜백이 "사라진 객체"를 쓰려고 함 → 크래시 4건 동시 발견.</p>
+  <p><strong>해결:</strong> "콜백 첫 줄에 안전장치" — null(널) 체크 규칙화.</p>
+
+  <h3>5. "마우스가 안 먹어" — 입력 차단</h3>
+
+  <div class="analogy-box">
+    <p>리모컨 배터리가 나갔는데, 리모컨 탓인지 TV 탓인지 모르는 거야.<br>
+    아무 버튼이나 눌러봐도 반응이 없어.</p>
+  </div>
+
+  <p>유니티 에디터에서 마우스 클릭이나 패닝이 갑자기 안 되는 거야.</p>
+  <p><strong>우리 사례:</strong> Alt+Tab으로 다른 프로그램 갔다 오면 마우스 패닝 불가 — 8번 수정.</p>
+  <p><strong>해결:</strong> "입력 관리는 한 곳에서" — 중앙 집중화.</p>
+
+  <!-- 안티패턴 vs 베스트 프랙티스 -->
+  <h2>하면 안 되는 것 vs 해야 하는 것</h2>
+
+  <table>
+    <thead>
+      <tr><th>하면 안 되는 것</th><th>해야 하는 것</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>복잡한 알고리즘부터 추가</td><td>데이터 구조를 먼저 바꿔봐</td></tr>
+      <tr><td>"나중에 쓸 거야" 코드 남기기</td><td>안 쓰면 바로 지워</td></tr>
+      <tr><td>만들면서 UX(유엑스) 결정하기</td><td>동작 방식 먼저 정하고 구현</td></tr>
+      <tr><td>AI가 찾은 거 전부 수정</td><td>"진짜야?" 확인 후 수정</td></tr>
+      <tr><td>한 세션에서 모든 걸 해결</td><td>막히면 새 세션으로</td></tr>
+    </tbody>
+  </table>
+
+  <div class="warning-box">
+    <p><strong>디렉터도 실수한다</strong></p>
+    <p>Bobby가 "전부 고쳐"라고 한 적 있어. 결과: 262건 수정 중 89%가 불필요했어.<br>
+    "과잉 수정 충동"은 디렉터의 가장 큰 적이야.<br>
+    범위를 좁히는 것 — "이 파일의 이 함수만 고쳐" — 이게 디렉터의 핵심 능력.</p>
+  </div>
+
+  <!-- Theta* 사례 -->
+  <h2>"프로세스를 따랐는데도 삽질한 사례"</h2>
+
+  <p>솔직하게 말할게. 이 방법도 만능은 아니야.</p>
+
+  <div class="connection-box">
+    <p><strong>Theta*(세타스타) 알고리즘 사건:</strong></p>
+    <p>에이전트 경로가 부자연스럽다고 했어. (Bobby의 찜찜함 → 좋은 What)<br>
+    Claude가 Theta*(세타스타)라는 새 알고리즘을 추가했어. (기술 판단 → 나쁘지 않은 접근)<br>
+    6일 동안 파라미터를 조정했어. (튜닝 → 여기서 문제 시작)<br>
+    결국 <strong>전부 제거</strong>했어.</p>
+    <p>진짜 답은? 데이터 구조를 바꾸는 거였어.<br>
+    통짜 경로를 구간별로 쪼개는 "Segment Stitching(세그먼트 스티칭)"으로 해결됐어.</p>
+    <p><strong>교훈: "복잡한 걸 추가하기 전에, 단순하게 만들 수 있는지 먼저 봐."</strong></p>
+  </div>
+
+  <h2>다른 프로젝트에도 적용되는 건</h2>
+
+  <p>우리가 배운 건 Unity MapTool에 한정된 게 아니야.<br>
+  AI와 함께 일하는 어떤 프로젝트에서든 이건 똑같아:</p>
+
+  <ul>
+    <li><strong>AI 말을 그대로 믿지 마</strong> — 교차검증 필수</li>
+    <li><strong>같은 문제 2번 → 규칙화</strong></li>
+    <li><strong>찜찜함을 참지 마</strong> — 가장 좋은 버그 리포트</li>
+    <li><strong>What으로 말해</strong> — AI의 해결 범위를 넓혀줘</li>
+    <li><strong>막히면 새 세션</strong> — AI도 고정관념에 갇혀</li>
+  </ul>
+
+  <h2>한계도 있어</h2>
+
+  <p>솔직하게:</p>
+  <ul>
+    <li><strong>AI가 눈이 없어</strong> — 화면에 보이는 결과는 사람만 판단 가능</li>
+    <li><strong>프로젝트 초반엔 규칙이 부족해서 실수가 많아</strong> — 시행착오가 필요해</li>
+    <li><strong>AI끼리 교차검증해도 7%는 오탐이 남아</strong> — 완벽은 없어</li>
+    <li><strong>메모리/규칙이 쌓이면 관리 비용도 늘어</strong> — 정기적으로 정리해야 해</li>
+  </ul>
+
+  <div class="quiz">
+    <p class="question"><strong>"설정을 바꿨는데 반영이 안 돼." 이건 5대 에러 중 뭘까?</strong></p>
+    <details open>
+      <summary>정답</summary>
+      <p><strong>3번. 캐시 누락.</strong><br>
+      "메모해둔 값"(캐시)이 새 설정을 반영 안 한 거야.<br>
+      비유로는 "전화번호가 바뀌었는데 메모장을 안 고친 것".</p>
+    </details>
+  </div>
+
+  <div class="chapter-summary">
+    <h4>이 챕터 정리</h4>
+    <ul>
+      <li>5대 에러: 상태 잔류 / 이중 매니저 / 캐시 누락 / 가드 누락 / 입력 차단</li>
+      <li>복잡한 해법 전에 단순한 해법 먼저</li>
+      <li>안 쓰는 코드는 바로 지워 ("나중에"의 실현율 5% 미만)</li>
+      <li>이 방법도 만능은 아니야 — 한계를 알고 쓰는 게 중요</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ==================== 부록 HEADER ==================== -->
+<div class="part-header">
+  <div class="part-number">부록</div>
+  <h1>도구와 참조</h1>
+  <p class="part-subtitle">체크리스트, 변환표, 템플릿</p>
+</div>
+
+<!-- ============================================
+     부록 J — 디렉터 체크리스트
+     ============================================ -->
+<div class="tab-panel" id="panel-appendix">
+</div>
+<div class="appendix" id="app-j">
+  <h2>부록 J — 디렉터 체크리스트</h2>
+
+  <h3>프로젝트 시작할 때 (10항목)</h3>
+  <table>
+    <thead><tr><th>#</th><th>항목</th><th>확인</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>CLAUDE.md 만들었나? (프로젝트 이름 + 기술 + 절대 규칙 3개)</td><td></td></tr>
+      <tr><td>2</td><td>memory/ 폴더 만들었나?</td><td></td></tr>
+      <tr><td>3</td><td>첫 기능 하나를 What으로 말했나?</td><td></td></tr>
+      <tr><td>4</td><td>유니티(또는 실행 환경)에서 눈으로 확인했나?</td><td></td></tr>
+      <tr><td>5</td><td>첫 커밋(세이브 포인트)을 찍었나?</td><td></td></tr>
+      <tr><td>6</td><td>AI에게 프로젝트 구조를 설명했나?</td><td></td></tr>
+      <tr><td>7</td><td>보호 파일(수정 금지 파일)을 정했나?</td><td></td></tr>
+      <tr><td>8</td><td>Graphics API(그래픽스 에이피아이, 그래픽 처리 규격) 등 환경 제약을 CLAUDE.md에 적었나?</td><td></td></tr>
+      <tr><td>9</td><td>커밋 규칙을 정했나? (누가 커밋하는지)</td><td></td></tr>
+      <tr><td>10</td><td>첫 테스트를 통과했나?</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h3>진행 중 체크 (5항목)</h3>
+  <table>
+    <thead><tr><th>#</th><th>항목</th><th>주기</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>같은 문제 2번 반복됐으면 규칙 추가</td><td>수시</td></tr>
+      <tr><td>2</td><td>memory/에 교훈 기록</td><td>세션마다</td></tr>
+      <tr><td>3</td><td>500줄 넘는 파일 확인 → "이 파일 긴 것 같아"</td><td>주 1회</td></tr>
+      <tr><td>4</td><td>AI 분석 결과 교차검증 했는지</td><td>대규모 분석 시</td></tr>
+      <tr><td>5</td><td>세션 끊기 신호 확인 (반복/위반/5파일)</td><td>수시</td></tr>
+    </tbody>
+  </table>
+
+  <h3>마감 체크 (5항목)</h3>
+  <table>
+    <thead><tr><th>#</th><th>항목</th><th>확인</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>안 쓰는 코드 정리했나?</td><td></td></tr>
+      <tr><td>2</td><td>memory/ 정리했나? (쓸데없는 것 삭제)</td><td></td></tr>
+      <tr><td>3</td><td>전수 스캔(공방) 최소 1회 했나?</td><td></td></tr>
+      <tr><td>4</td><td>규칙서(CLAUDE.md)가 최신 상태인지</td><td></td></tr>
+      <tr><td>5</td><td>최종 유니티 테스트 통과했나?</td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ============================================
+     부록 K — What vs How 변환 20개
+     ============================================ -->
+<div class="appendix" id="app-k">
+  <h2>부록 K — What vs How 변환 20개</h2>
+
+  <p>Ch.1에서 10개를 봤어. 여기 10개 더 추가:</p>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>How (이렇게 하면 안 돼)</th><th>What (이렇게 해)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>"partial(파셜)로 쪼개야 하나?"</td><td>"이 파일 너무 커진 것 같은데 괜찮아?"</td></tr>
+      <tr><td>2</td><td>"해시에 이 필드 포함해야 해?"</td><td>"설정 바꿨는데 왜 반영이 안 돼?"</td></tr>
+      <tr><td>3</td><td>"Dictionary 대신 List 써야 하나?"</td><td>"이거 점점 느려지는 것 같은데?"</td></tr>
+      <tr><td>4</td><td>"isRandom 체크를 프로퍼티로?"</td><td>"Random이랑 Sequential이 다르게 동작하는데?"</td></tr>
+      <tr><td>5</td><td>"OnEnable에서 초기화해야 하나?"</td><td>"씬 열 때마다 이게 초기화 안 돼 있어"</td></tr>
+      <tr><td>6</td><td>"캐시를 무효화해야 하나?"</td><td>"아까 바꾼 게 반영 안 된 것 같아"</td></tr>
+      <tr><td>7</td><td>"static(스태틱) 필드를 리셋해야 하나?"</td><td>"유니티 다시 시작하면 이전 값이 남아 있어"</td></tr>
+      <tr><td>8</td><td>"Undo(언두) 순서를 바꿔야 하나?"</td><td>"Ctrl+Z 하면 이상하게 돌아가"</td></tr>
+      <tr><td>9</td><td>"이벤트 구독을 해제해야 하나?"</td><td>"이 기능 끄고 다른 거 했는데 아직 반응해"</td></tr>
+      <tr><td>10</td><td>"A*(에이스타) 반복 상한을 줄여야 하나?"</td><td>"가끔 화면이 뚝 끊겨"</td></tr>
+      <tr><td>11</td><td>"try-finally로 감싸야 하나?"</td><td>"중간에 에러 나면 설정이 원래대로 안 돌아와"</td></tr>
+      <tr><td>12</td><td>"Dispose를 호출해야 하나?"</td><td>"탭을 닫았는데 뭔가 뒤에서 아직 돌아가는 느낌"</td></tr>
+      <tr><td>13</td><td>"coroutine을 StopCoroutine해야 해?"</td><td>"멈추라고 했는데 아직 움직여"</td></tr>
+      <tr><td>14</td><td>"null(널) 체크를 추가해야 하나?"</td><td>"가끔 갑자기 빨간 에러가 뜨는데"</td></tr>
+      <tr><td>15</td><td>"디바운스를 걸어야 하나?"</td><td>"버튼 빠르게 누르면 두 번 실행돼"</td></tr>
+      <tr><td>16</td><td>"readonly로 바꿔야 하나?"</td><td>"이 값이 중간에 바뀌면 안 되는데 바뀌는 것 같아"</td></tr>
+      <tr><td>17</td><td>"FindObjectsByType 대신 캐시해야 해?"</td><td>"이 기능 쓸 때마다 프레임이 살짝 떨려"</td></tr>
+      <tr><td>18</td><td>"SerializeField(시리얼라이즈필드, 저장 대상 표시)를 추가해야 하나?"</td><td>"유니티 껐다 켜면 이 설정이 날아가"</td></tr>
+      <tr><td>19</td><td>"enum(이넘, 열거형 — 선택지 목록)에 값을 추가해야 하나?"</td><td>"여기 선택지가 하나 빠진 것 같아"</td></tr>
+      <tr><td>20</td><td>"조건문 순서를 바꿔야 하나?"</td><td>"A를 먼저 하면 되는데 B를 먼저 해서 꼬여"</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>패턴이 보여?</strong> 왼쪽은 코드 용어, 오른쪽은 느낌이야.<br>
+  느낌으로 말하면 AI가 코드 용어를 포함한 <strong>더 넓은 범위</strong>에서 답을 찾아와.</p>
+</div>
+
+
+<!-- ============================================
+     부록 L — CLAUDE.md 템플릿
+     ============================================ -->
+<div class="appendix" id="app-l">
+  <h2>부록 L — CLAUDE.md 템플릿</h2>
+
+  <p>새 프로젝트를 시작할 때 이걸 복사해서 쓰면 돼.<br>
+  <code>[ ]</code> 안에 너의 프로젝트 정보를 넣어.</p>
+
+  <h3>구조 설명</h3>
+  <ul>
+    <li><strong>프로젝트 개요</strong> — AI가 제일 먼저 읽는 부분. "이 프로젝트가 뭔지" 한눈에</li>
+    <li><strong>절대 규칙</strong> — 어떤 상황에서도 지켜야 하는 것</li>
+    <li><strong>답변 원칙</strong> — AI가 너한테 어떻게 말해야 하는지</li>
+    <li><strong>상황별 규칙</strong> — 프로젝트를 진행하면서 하나씩 추가</li>
+    <li><strong>참조 문서</strong> — 필요할 때만 읽는 상세 문서 목록</li>
+  </ul>
+
+  <div class="code-block">
+<span class="line"><span class="cmt"># CLAUDE.md</span></span>
+<span class="line"></span>
+<span class="line"><span class="cmt">## 프로젝트 개요</span></span>
+<span class="line"></span>
+<span class="line">| 항목 | 값 |</span>
+<span class="line">|------|-----|</span>
+<span class="line">| <span class="kw">프로젝트</span> | [프로젝트 이름] |</span>
+<span class="line">| <span class="kw">엔진/프레임워크</span> | [Unity 6 / React / Python 등] |</span>
+<span class="line">| <span class="kw">언어</span> | [C# / TypeScript / Python 등] |</span>
+<span class="line">| <span class="kw">주요 폴더</span> | [src/ 또는 Assets/Scripts/ 등] |</span>
+<span class="line"></span>
+<span class="line"><span class="cmt">## 답변 원칙</span></span>
+<span class="line"></span>
+<span class="line">- 기술 용어는 비유로 풀어서 설명</span>
+<span class="line">- 완료 보고는 한 줄 요약 먼저</span>
+<span class="line">- 선택이 필요하면 2가지로 좁혀서 추천</span>
+<span class="line">- 에러는 해결법 먼저, 원인 나중에</span>
+<span class="line"></span>
+<span class="line"><span class="cmt">## 절대 규칙</span></span>
+<span class="line"></span>
+<span class="line">1. 최소 코드로 동작 먼저. 안 시킨 기능 추가 금지</span>
+<span class="line">2. 수정 -> 테스트 -> 확인 -> 다음 (한꺼번에 금지)</span>
+<span class="line">3. [프로젝트 고유 제약 - 예: D3D12(디쓰리디트웰브) 금지]</span>
+<span class="line"></span>
+<span class="line"><span class="cmt">## 상황별 규칙 (문제가 터질 때마다 추가)</span></span>
+<span class="line"></span>
+<span class="line"><span class="cmt"><!-- 처음엔 비어 있어도 OK --></span></span>
+<span class="line"></span>
+<span class="line"><span class="cmt">## 보호 파일 (수정 시 규칙 번호 명시)</span></span>
+<span class="line"></span>
+<span class="line"><span class="cmt"><!-- 처음엔 비어 있어도 OK --></span></span>
+<span class="line"></span>
+<span class="line"><span class="cmt">## 참조 문서</span></span>
+<span class="line"></span>
+<span class="line">| 문서 | 언제 읽어 |</span>
+<span class="line">|------|---------|</span>
+<span class="line">| [docs/architecture.md] | [새 시스템 추가할 때] |</span>
+<span class="line">| [memory/MEMORY.md] | [자동 로드] |</span>
+  </div>
+
+  <p><strong>시작할 때 빈칸이 많아도 괜찮아.</strong><br>
+  프로젝트를 하면서 규칙이 하나씩 생기는 게 자연스러워.<br>
+  우리도 처음엔 규칙 5개였는데, 41일 후에 53개가 됐어.</p>
+</div>
+
+
+<!-- ============================================
+     FINAL MESSAGE
+     ============================================ -->
+<div class="chapter" style="text-align: center; padding: var(--gap-2xl) 0;">
+  <div class="cover-decoration"></div>
+
+  <p class="final-message">
+    코드를 몰라도 된다.<br>
+    방향을 정하고, 눈으로 확인하고, "진짜야?" 물어보면 된다.<br><br>
+    그게 디렉터야.<br><br>
+    찜찜할 때 참지 마. 그게 최고의 버그 리포트야.<br>
+    AI가 찾은 거 다 믿지 마. 10개 중 8개는 헛소리야.<br>
+    막히면 새 세션 열어. AI도 고정관념에 갇혀.<br><br>
+    <strong>이 방법으로 우리는 41일 만에 15만 줄을 만들었다.</strong>
+  </p>
+
+  <div class="cover-decoration"></div>
+  <p style="margin-top: var(--gap-xl); color: var(--text-light); font-size: 0.9rem;">
+    Bobby × Claude × Antigravity<br>
+    2026
+  </p>
+</div>
+
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const partTabs = document.querySelectorAll('.part-tab');
+  const chGroups = document.querySelectorAll('.ch-group');
+  const chTabs = document.querySelectorAll('.ch-tab');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  function activatePart(partId, skipChapter) {
+    partTabs.forEach(t => t.classList.remove('active'));
+    const pt = document.querySelector('.part-tab[data-part="' + partId + '"]');
+    if (pt) pt.classList.add('active');
+    chGroups.forEach(g => g.classList.remove('active'));
+    const cg = document.querySelector('.ch-group[data-part="' + partId + '"]');
+    if (cg) cg.classList.add('active');
+    if (!skipChapter && cg) {
+      const firstCh = cg.querySelector('.ch-tab');
+      if (firstCh) activateChapter(firstCh.getAttribute('data-tab'));
+    }
+  }
+
+  function activateChapter(tabId) {
+    chTabs.forEach(t => t.classList.remove('active'));
+    const ct = document.querySelector('.ch-tab[data-tab="' + tabId + '"]');
+    if (ct) ct.classList.add('active');
+    panels.forEach(p => p.classList.remove('active'));
+    const panel = document.getElementById(tabId);
+    if (panel) panel.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function switchTab(tabId) {
+    const ct = document.querySelector('.ch-tab[data-tab="' + tabId + '"]');
+    if (ct) {
+      const partId = ct.closest('.ch-group').getAttribute('data-part');
+      activatePart(partId, true);
+      activateChapter(tabId);
+    }
+  }
+
+  partTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      activatePart(this.getAttribute('data-part'));
+      const cg = document.querySelector('.ch-group[data-part="' + this.getAttribute('data-part') + '"]');
+      if (cg) {
+        const firstCh = cg.querySelector('.ch-tab');
+        if (firstCh) history.replaceState(null, '', '#' + firstCh.getAttribute('data-tab'));
+      }
+    });
+  });
+
+  chTabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      activateChapter(this.getAttribute('data-tab'));
+      history.replaceState(null, '', '#' + this.getAttribute('data-tab'));
+    });
+  });
+
+  const hash = window.location.hash.slice(1);
+  if (hash && document.getElementById(hash)) {
+    switchTab(hash);
+  }
+
+  window.addEventListener('hashchange', function() {
+    const h = window.location.hash.slice(1);
+    if (h && document.getElementById(h)) switchTab(h);
+  });
+});
+</script>
+</div>
+</div>
+</div>
+</body>
+</html>

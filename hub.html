@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>151K줄 교재 — Bobby × Claude</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap">
+  <style>
+    /* ══════════════════════════════════════════════
+       DESIGN SYSTEM — Dark Immersive
+       ══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep:    #06060c;
+      --bg-surface: #0e0e18;
+      --bg-card:    rgba(255, 255, 255, 0.03);
+      --bg-card-hover: rgba(255, 107, 107, 0.06);
+
+      --accent:       #FF6B6B;
+      --accent-glow:  rgba(255, 107, 107, 0.4);
+      --accent-soft:  rgba(255, 107, 107, 0.12);
+      --accent-dim:   #cc5555;
+
+      --text:       #e8e8ec;
+      --text-sub:   #9898a8;
+      --text-muted: #58586a;
+
+      --border:     rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(255, 107, 107, 0.3);
+
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Ambient Background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -40%; left: -20%;
+      width: 80vw; height: 80vw;
+      background: radial-gradient(circle, rgba(255, 107, 107, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -30%; right: -10%;
+      width: 60vw; height: 60vw;
+      background: radial-gradient(circle, rgba(78, 205, 196, 0.03) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ══════════════════════════════════════════════
+       HEADER — Hero
+       ══════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 100px 24px 72px;
+    }
+
+    .hero-number {
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--accent);
+      line-height: 1;
+      text-shadow: 0 0 60px var(--accent-glow), 0 0 120px rgba(255, 107, 107, 0.15);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+
+    .hero-meta {
+      margin-top: 16px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    .hero-divider {
+      width: 48px;
+      height: 2px;
+      background: var(--accent);
+      margin: 40px auto 0;
+      border-radius: 1px;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    /* ══════════════════════════════════════════════
+       ROADMAP
+       ══════════════════════════════════════════════ */
+    .roadmap {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px 40px;
+    }
+
+    .roadmap-header {
+      margin-bottom: 40px;
+    }
+    .roadmap-header h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.04em;
+    }
+    .roadmap-header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* ── Step Flow ── */
+    .step-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    /* Vertical line */
+    .step-flow::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 40px;
+      bottom: 40px;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--accent-soft) 10%,
+        var(--accent-soft) 90%,
+        transparent
+      );
+    }
+
+    .step-connector {
+      height: 24px;
+      position: relative;
+    }
+
+    /* ── Book Card ── */
+    .book-card {
+      display: block;
+      position: relative;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 28px 28px 28px 56px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .book-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 107, 107, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    /* Step dot */
+    .book-card::before {
+      content: attr(data-step);
+      position: absolute;
+      left: -12px;
+      top: 32px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg-deep);
+      border: 2px solid var(--accent-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      text-align: center;
+      padding-top: 1px;
+    }
+    .book-card:hover::before {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .level-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    .level-tag.beginner   { background: rgba(78, 205, 196, 0.12); color: #4ECDC4; }
+    .level-tag.intermediate { background: rgba(255, 230, 109, 0.12); color: #FFE66D; }
+    .level-tag.advanced   { background: rgba(255, 107, 107, 0.12); color: #FF6B6B; }
+    .level-tag.everyone   { background: rgba(195, 174, 214, 0.12); color: #C3AED6; }
+
+    .book-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .book-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .book-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+
+    .book-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 14px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Chapter List (expandable) ── */
+    .chapter-list {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .chapter-list summary {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .chapter-list summary:hover {
+      color: var(--accent);
+    }
+    .chapter-list ul {
+      list-style: none;
+      padding: 10px 0 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 20px;
+    }
+    .chapter-list li {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      padding: 2px 0;
+    }
+    .chapter-list li .ch {
+      color: var(--accent-dim);
+      font-weight: 700;
+      margin-right: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+    }
+
+    /* ══════════════════════════════════════════════
+       TIPS
+       ══════════════════════════════════════════════ */
+    .tips {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+    .tips h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+    }
+    .tip-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .tip-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+    .tip-card:hover {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .tip-card h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .tip-card p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .tip-card strong {
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    /* ══════════════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════════════ */
+    .footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 32px 24px 48px;
+      border-top: 1px solid var(--border);
+    }
+    .footer p {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ══════════════════════════════════════════════
+       MOBILE
+       ══════════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      .hero { padding: 72px 20px 56px; }
+      .roadmap, .tips { padding-left: 20px; padding-right: 20px; }
+
+      .step-flow::before { left: 16px; }
+      .book-card { padding: 22px 20px 22px 48px; }
+      .book-card::before { left: -14px; }
+
+      .tip-grid { grid-template-columns: 1fr; }
+      .chapter-list ul { grid-template-columns: 1fr; }
+
+      .book-card h3 { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-number">151,000</div>
+  <h1>비개발자가 AI와 만든 코드,<br>그 여정의 모든 기록</h1>
+  <p class="hero-meta">BOBBY &times; CLAUDE &mdash; 41일 &middot; 451커밋 &middot; 527파일</p>
+  <div class="hero-divider"></div>
+</section>
+
+<!-- ═══════════════ ROADMAP ═══════════════ -->
+<section class="roadmap">
+  <div class="roadmap-header">
+    <h2>읽기 로드맵</h2>
+    <p>위에서 아래로 순서대로 읽으면 자연스럽게 이어져. 관심 있는 것부터 골라 읽어도 돼.</p>
+  </div>
+
+  <div class="step-flow">
+
+    <!-- STEP 1 -->
+    <a class="book-card" data-step="1" href="pages/book2-ai-collaboration.html#panel-claude-intro">
+      <div class="card-head">
+        <span class="level-tag beginner">입문</span>
+        <h3>Claude의 세 얼굴 + 효과 분석</h3>
+      </div>
+      <p class="book-subtitle">AI가 뭔지 먼저 알아야 함께 일하지</p>
+      <p class="book-desc">
+        Opus·Sonnet·Haiku 세 모델의 성격과 역할 분담,
+        Claude에게 자기를 소개하는 법,
+        41일간 뭐가 효과적이었는지 Red/Blue Cell 공방 결과.
+      </p>
+      <div class="book-meta">
+        <span>약 45분</span>
+        <span>2권 서두</span>
+      </div>
+    </a>
+
+    <div class="step-connector"></div>
+
+    <!-- STEP 2 -->
+    <a class="book-card" data-step="2" href="pages/book1-code-reading.html">
+      <div class="card-head">
+        <span class="level-tag beginner">입문 → 중급</span>
+        <h3>1권 — 코드가 읽히는 법</h3>
+      </div>
+      <p class="book-subtitle">151,000줄을 만든 사람이 자기 코드를 읽는 법</p>
+      <p class="book-desc">
+        코드를 한 번도 본 적 없는 사람이,
+        변수 → 함수 → 클래스 → 패턴 → 실전 파일까지
+        단계별로 "읽는 눈"을 키우는 과정.
+      </p>
+      <div class="book-meta">
+        <span>약 4시간</span>
+        <span>23챕터 + 부록 5개</span>
+        <span>~192페이지</span>
+      </div>
+      <details class="chapter-list">
+        <summary>목차 보기</summary>
+        <ul>
+          <li><span class="ch">Part 0</span> 코드가 읽히는 눈</li>
+          <li><span class="ch">Part 1</span> 단어를 읽자</li>
+          <li><span class="ch">Part 2</span> 문장을 읽자</li>
+          <li><span class="ch">Part 3</span> 설계도를 읽자</li>
+          <li><span class="ch">Part 4</span> C#으로 쓰인 문장</li>
+          <li><span class="ch">Part 5</span> Unity가 움직이는 법</li>
+          <li><span class="ch">Part 6</span> 실전 — 파일 열고 읽기</li>
+          <li><span class="ch">부록</span> 비유 사전, 용어집, 체크리스트</li>
+        </ul>
+      </details>
+    </a>
+
+    <div class="step-connector"></div>
+
+    <!-- STEP 3 -->
+    <a class="book-card" data-step="3" href="pages/book2-ai-collaboration.html#panel-ch1">
+      <div class="card-head">
+        <span class="level-tag intermediate">중급</span>
+        <h3>2권 — AI와 함께 일하는 법</h3>
+      </div>
+      <p class="book-subtitle">151K줄을 만든 바이브 코더의 협업 가이드</p>
+      <p class="book-desc">
+        프롬프트의 기술, 범위 통제, 버그 수정 패턴,
+        멀티세션 운영, 맥락 엔지니어링까지.
+        AI와 "잘" 일하는 실전 노하우.
+      </p>
+      <div class="book-meta">
+        <span>약 2시간</span>
+        <span>11챕터 + 부록 6개</span>
+      </div>
+      <details class="chapter-list">
+        <summary>목차 보기</summary>
+        <ul>
+          <li><span class="ch">★</span> Claude 소개 + 효과 분석</li>
+          <li><span class="ch">Part 1</span> 이해하기 (Ch.1~3)</li>
+          <li><span class="ch">Part 2</span> 함께 일하기 (Ch.4~5)</li>
+          <li><span class="ch">Part 3</span> 성장하기 (Ch.6~7)</li>
+          <li><span class="ch">Part 4</span> 실전 깊은 기술 (Ch.8~11)</li>
+          <li><span class="ch">부록</span> 프롬프트 템플릿, 사전, 체크리스트</li>
+        </ul>
+      </details>
+    </a>
+
+    <div class="step-connector"></div>
+
+    <!-- STEP 4 -->
+    <a class="book-card" data-step="4" href="pages/book3-commander-note.html">
+      <div class="card-head">
+        <span class="level-tag advanced">고급</span>
+        <h3>3권 — 디렉터의 팀 세팅 노트</h3>
+      </div>
+      <p class="book-subtitle">AI 크루를 데리고 15만 줄을 찍어내는 법</p>
+      <p class="book-desc">
+        Opus·Sonnet·Haiku를 팀으로 운영하는 법.
+        역할 분담, 세션 설계, 품질 관리,
+        멀티에이전트 오케스트레이션.
+      </p>
+      <div class="book-meta">
+        <span>약 1시간</span>
+        <span>6챕터 + 부록 3개</span>
+      </div>
+      <details class="chapter-list">
+        <summary>목차 보기</summary>
+        <ul>
+          <li><span class="ch">Part 1</span> 마인드셋 (Ch.1~2)</li>
+          <li><span class="ch">Part 2</span> 세팅하기 (Ch.3~4)</li>
+          <li><span class="ch">Part 3</span> 실전 (Ch.5~6)</li>
+          <li><span class="ch">부록</span> 체크리스트, What vs How, CLAUDE.md 템플릿</li>
+        </ul>
+      </details>
+    </a>
+
+    <div class="step-connector"></div>
+
+    <!-- STEP 5 -->
+    <a class="book-card" data-step="5" href="pages/book4-41days.html#panel-ch1">
+      <div class="card-head">
+        <span class="level-tag everyone">누구나</span>
+        <h3>4권 — 41일의 기록</h3>
+      </div>
+      <p class="book-subtitle">비개발자가 AI와 151K줄을 만든 이야기</p>
+      <p class="book-desc">
+        감정 곡선, 배움의 역설, 실패 일지,
+        사라진 직업의 이름.
+        기술서가 아닌 에세이 — 여정의 솔직한 기록.
+      </p>
+      <div class="book-meta">
+        <span>약 1.5시간</span>
+        <span>8챕터 + 부록</span>
+      </div>
+      <details class="chapter-list">
+        <summary>목차 보기</summary>
+        <ul>
+          <li><span class="ch">Part 1</span> 감정과 관계 (Ch.1~2)</li>
+          <li><span class="ch">Part 2</span> 배움과 정체성 (Ch.3~4)</li>
+          <li><span class="ch">Part 3</span> 실패와 성장 (Ch.5~6)</li>
+          <li><span class="ch">Part 4</span> 미래 (Ch.7~8)</li>
+          <li><span class="ch">부록</span> 프롬프트 진화 타임라인</li>
+        </ul>
+      </details>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══════════════ TIPS ═══════════════ -->
+<section class="tips">
+  <h2>읽기 팁</h2>
+  <div class="tip-grid">
+    <div class="tip-card">
+      <h4>순서대로 안 읽어도 돼</h4>
+      <p>4권(에세이)은 코드 몰라도 재밌어.
+        기술 내용이 궁금하면 2권부터,
+        코드 읽기부터 배우고 싶으면 1권부터.</p>
+    </div>
+    <div class="tip-card">
+      <h4>영어 용어엔 읽는 법이 붙어있어</h4>
+      <p>처음 나올 때: <strong>partial(파셜, 부분 파일)</strong><br>
+        이후: <strong>partial(파셜)</strong><br>
+        개발자랑 대화할 때 바로 써먹을 수 있어.</p>
+    </div>
+    <div class="tip-card">
+      <h4>비유가 먼저, 코드는 나중</h4>
+      <p>모든 개념을 일상 비유로 먼저 설명해.
+        "null = 빈 컵", "캐시 = 냉장고 반찬".
+        비유만 이해해도 절반은 된 거야.</p>
+    </div>
+    <div class="tip-card">
+      <h4>실제 프로젝트 코드야</h4>
+      <p>교과서 예제가 아니라 진짜 돌아가는
+        MapTool 151K줄에서 뽑은 코드.
+        "이게 실제로 이렇게 쓰여" 감각이 생겨.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <p>Bobby &times; Claude &mdash; 2026.03 &middot; 41일 &middot; 451커밋 &middot; 151,000줄</p>
+</footer>
+
+</body>
+</html>
