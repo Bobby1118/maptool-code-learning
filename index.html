@@ -105,16 +105,9 @@
 
 <script>
 (function() {
-  // 이미 인증됐으면 바로 이동
-  if (sessionStorage.getItem('auth') === 'ok') {
-    location.replace('hub.html');
-    return;
-  }
-
   document.getElementById('gate-form').addEventListener('submit', function(e) {
     e.preventDefault();
     if (document.getElementById('pw').value === '151000') {
-      sessionStorage.setItem('auth', 'ok');
       location.replace('hub.html');
     } else {
       document.getElementById('err').classList.add('show');
